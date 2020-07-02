@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 	"fyne.io/fyne/dialog"
@@ -9,9 +10,11 @@ import (
 	setup "github.com/splitbrain/golocal/setup"
 	"log"
 	"os"
+	"regexp"
 )
 
 func main() {
+	flag.Usage = usage
 	flagInstall := flag.Bool("install", false, "Install the protocol handler")
 	flagUninstall := flag.Bool("uninstall", false, "Uninstall the protocol handler")
 	flag.Parse()
@@ -21,42 +24,62 @@ func main() {
 	} else if *flagUninstall {
 		uninstall(nil)
 	} else {
-		gui()
+		_, window := guiInit()
+		if len(os.Args) > 1 {
+			go run(os.Args[1], window)
+		} else {
+			go guiInstaller(window)
+		}
+
+		// start the main loop
+		window.ShowAndRun()
 	}
 }
 
-func gui() {
+func guiInit() (fyne.App, fyne.Window) {
 	application := app.New()
+	w := application.NewWindow(fmt.Sprintf("%s handler", setup.PROTOCOL))
+	w.Resize(fyne.NewSize(800, 400))
+	return application, w
+}
 
-	label := "Hello"
-	if len(os.Args) > 1 {
-		label = os.Args[1]
-	}
+func guiInstaller(window fyne.Window) {
+	lblIntro := widget.NewLabel("This lets you install a protocol handler...") // FIXME better intro
+	btnInstall := widget.NewButton("Install", func() { install(window) })
+	btnUninstall := widget.NewButton("Uninstall", func() { uninstall(window) })
 
-	w := application.NewWindow("Test")
-	lblIntro := widget.NewLabel(label)
-	btnInstall := widget.NewButton("Install", func() { install(w) })
-	btnUninstall := widget.NewButton("Uninstall", func() { uninstall(w) })
-
-	w.SetContent(
+	window.SetContent(
 		widget.NewVBox(
 			lblIntro,
 			btnInstall,
 			btnUninstall,
 		),
 	)
+}
 
-	w.Resize(fyne.NewSize(800, 400))
-	w.ShowAndRun()
+func run(path string, window fyne.Window) {
+	// remove protocol
+	r, _ := regexp.Compile("^.*?://")
+	path = r.ReplaceAllString(path, "")
+
+	// FIXME decode URI, parse it maybe?
+
+	window.SetContent(widget.NewLabel(path))
+
+	err := setup.Run(path)
+	errHandler(err, "", window)
+	if(err == nil) {
+		window.Close()
+	}
 }
 
 func install(window fyne.Window) {
-	err := setup.LinuxInstall()
+	err := setup.Install()
 	errHandler(err, "Protocol handler installed", window)
 }
 
 func uninstall(window fyne.Window) {
-	err := setup.LinuxUninstall()
+	err := setup.Uninstall()
 	errHandler(err, "Protocol handler removed", window)
 }
 
@@ -66,7 +89,7 @@ func errHandler(err error, success string, window fyne.Window) {
 	if err == nil {
 		if window == nil {
 			log.Println(success)
-		} else {
+		} else if success != "" {
 			dialog.ShowInformation("Success", success, window)
 		}
 	} else {
@@ -76,4 +99,14 @@ func errHandler(err error, success string, window fyne.Window) {
 			dialog.ShowError(err, window)
 		}
 	}
+}
+
+func usage() {
+	fmt.Printf("Usage: %s %s://path \n", os.Args[0], setup.PROTOCOL)
+	fmt.Println("  Protocol handling. Will try to open the given path locally.")
+	fmt.Println()
+
+	fmt.Printf("Usage: %s [OPTION]\n", os.Args[0])
+	fmt.Println("  Install or uninstall the protocol handler")
+	flag.PrintDefaults()
 }

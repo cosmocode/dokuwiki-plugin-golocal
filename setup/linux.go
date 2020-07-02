@@ -1,3 +1,5 @@
+// +build linux
+
 package setup
 
 import (
@@ -21,7 +23,7 @@ MimeType=%s;
 `
 
 // see https://unix.stackexchange.com/questions/497146/create-a-custom-url-protocol-handler
-func LinuxInstall() error {
+func Install() error {
 	self := os.Args[0]
 	desktopFile := desktopFile()
 	schemeMimeType := fmt.Sprintf("x-scheme-handler/%s", PROTOCOL)
@@ -46,7 +48,7 @@ func LinuxInstall() error {
 	return nil
 }
 
-func LinuxUninstall() error {
+func Uninstall() error {
 	desktopFilePath, err0 := desktopFilePath()
 	if err0 != nil {
 		return err0
@@ -61,6 +63,15 @@ func LinuxUninstall() error {
 	if err2 != nil {
 		return fmt.Errorf("Failed to remove desktop file.\n%s\n%s", desktopFilePath, err2.Error())
 	}
+	return nil
+}
+
+func Run(path string) error {
+	out, err := exec.Command("xdg-open", path).CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("Failed to execute xdg-open command.\n%s\n%s", err.Error(), out)
+	}
+
 	return nil
 }
 
