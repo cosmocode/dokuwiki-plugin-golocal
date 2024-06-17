@@ -3,11 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"fyne.io/fyne"
-	"fyne.io/fyne/app"
-	"fyne.io/fyne/dialog"
-	"fyne.io/fyne/widget"
-	setup "github.com/splitbrain/golocal/setup"
+	fyne "fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/widget"
+	"github.com/cosmocode/golocal/i18n"
+	setup "github.com/cosmocode/golocal/setup"
 	"log"
 	"os"
 	"regexp"
@@ -18,6 +21,8 @@ func main() {
 	flagInstall := flag.Bool("install", false, "Install the protocol handler")
 	flagUninstall := flag.Bool("uninstall", false, "Uninstall the protocol handler")
 	flag.Parse()
+
+	i18n.Initialize()
 
 	if *flagInstall {
 		install(nil)
@@ -44,13 +49,16 @@ func guiInit() (fyne.App, fyne.Window) {
 }
 
 func guiInstaller(window fyne.Window) {
-	lblIntro := widget.NewLabel("This lets you install a protocol handler...") // FIXME better intro
-	btnInstall := widget.NewButton("Install", func() { install(window) })
-	btnUninstall := widget.NewButton("Uninstall", func() { uninstall(window) })
+	lblIntro := widget.NewLabel(i18n.T("intro", nil))
+	lblIntro.Wrapping = fyne.TextWrapWord
+	btnInstall := widget.NewButton(i18n.T("install", nil), func() { install(window) })
+	btnUninstall := widget.NewButton(i18n.T("uninstall", nil), func() { uninstall(window) })
 
 	window.SetContent(
-		widget.NewVBox(
+		container.New(
+			layout.NewVBoxLayout(),
 			lblIntro,
+			layout.NewSpacer(),
 			btnInstall,
 			btnUninstall,
 		),
@@ -68,19 +76,19 @@ func run(path string, window fyne.Window) {
 
 	err := setup.Run(path)
 	errHandler(err, "", window)
-	if(err == nil) {
+	if err == nil {
 		window.Close()
 	}
 }
 
 func install(window fyne.Window) {
 	err := setup.Install()
-	errHandler(err, "Protocol handler installed", window)
+	errHandler(err, i18n.T("installed", nil), window)
 }
 
 func uninstall(window fyne.Window) {
 	err := setup.Uninstall()
-	errHandler(err, "Protocol handler removed", window)
+	errHandler(err, i18n.T("uninstalled", nil), window)
 }
 
 // Outputs either error or success message using the appropriate channel based on if
@@ -90,7 +98,7 @@ func errHandler(err error, success string, window fyne.Window) {
 		if window == nil {
 			log.Println(success)
 		} else if success != "" {
-			dialog.ShowInformation("Success", success, window)
+			dialog.ShowInformation(i18n.T("success", nil), success, window)
 		}
 	} else {
 		if window == nil {
