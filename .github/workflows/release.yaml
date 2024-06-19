@@ -1,3 +1,4 @@
+name: Build and release go binaries
 on:
   push:
     tags:
