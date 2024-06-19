@@ -1,8 +1,6 @@
 intro: |
-  This is the intro Text it is very very long asasfa sfasd asf asf asf ahsjh jkashdjkash kjash jkhasjkdh asjk asjkhfajshf jkash jkashj khasdj fhaskj asd this is at the very end
-  This is a new line
-  
-  and this is another new line
+  This is the protocol handler for golocal links. You can use the buttons below to add or remove the
+  registration in your system.
 install: Install
 uninstall: Uninstall
 installed: Protocol handler installed

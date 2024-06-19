@@ -1,3 +1,8 @@
-intro: Dies ist die Einführung
+intro: |
+  Dies ist der Protokoll-Handler für golocal-Links. Sie können die Schaltflächen unten verwenden, um
+  die den Handler in Ihrem System zu registrieren oder zu entfernen.
 install: Installieren
 uninstall: Deinstallieren
+installed: Protokoll-Handler installiert
+uninstalled: Protokoll-Handler deinstalliert
+success: Erfolg
