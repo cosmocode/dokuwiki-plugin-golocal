@@ -1,6 +1,6 @@
 
-NAME := localink
-OUT := out
+NAME := golocal
+OUT := ../dl
 
 clean:
 	rm -f $(OUT)/*
