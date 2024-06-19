@@ -1,0 +1,39 @@
+on:
+  push:
+    tags:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  releases-matrix:
+    name: Release Go Binary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'src/go.mod'
+          cache-dependency-path: |
+             src/go.sum
+      - name: Install Requirements
+        run: |
+          # see https://github.com/fyne-io/fyne-cross-images/blob/main/linux/Dockerfile
+          sudo dpkg --add-architecture amd64;
+          sudo dpkg --add-architecture i386;
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential gcc-multilib gcc-mingw-w64 pkg-config
+          sudo apt-get install -y --no-install-recommends libgl-dev:amd64 libx11-dev:amd64 libxrandr-dev:amd64 libxxf86vm-dev:amd64 libxi-dev:amd64 libxcursor-dev:amd64 libxinerama-dev:amd64 libxkbcommon-dev:amd64
+          sudo apt-get install -y --no-install-recommends libgl-dev:i386 libx11-dev:i386 libxrandr-dev:i386 libxxf86vm-dev:i386 libxi-dev:i386 libxcursor-dev:i386 libxinerama-dev:i386 libxkbcommon-dev:i386
+      - name: Build Binaries
+        run: |
+          cd src
+          make all
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dl/*
