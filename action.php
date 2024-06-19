@@ -64,31 +64,32 @@ class action_plugin_golocal extends ActionPlugin
     /**
      * Build the list of downloads
      *
-     * @todo this could be a syntax component
      * @return string
+     * @todo this could be a syntax component
+     * @todo this could refer to the release matching the installed version
      */
     protected function getDownloadLinks()
     {
-
-        $files = glob(__DIR__ . '/dl/*');
+        $oslist = ['windows', 'linux'];
+        $archlist = ['amd64', 'x86'];
 
         $html = '<ul class="golocal-download">';
-        foreach ($files as $file) {
-            $file = basename($file);
-            $url = DOKU_BASE . 'lib/plugins/golocal/dl/' . $file;
-            [$os, $arch] = sexplode('_', (sexplode('-', basename($file, '.exe'), 2))[1], 2);
+        foreach ($oslist as $os) {
+            foreach ($archlist as $arch) {
+                $file = 'golocal-' . $os . '_' . $arch;
+                $file .= $os === 'windows' ? '.exe' : '';
+                $url = 'https://github.com/cosmocode/dokuwiki-plugin-golocal/releases/latest/download/'.$file;
 
-            $classes = join(' ', ['li', 'os-' . $os, 'arch-' . $arch]);
+                $classes = join(' ', ['li', 'os-' . $os, 'arch-' . $arch]);
 
-            $html .= '<li><div class="' . $classes . '">';
-            $html .= inlineSVG(__DIR__ . '/icons/' . $os . '.svg');
-            $html .= inlineSVG(__DIR__ . '/icons/' . $arch . '.svg');
-            $html .= '<a href="' . $url . '">' . $file . '</a>';
-            $html .= '</div></li>';
-
+                $html .= '<li><div class="' . $classes . '">';
+                $html .= inlineSVG(__DIR__ . '/icons/' . $os . '.svg');
+                $html .= inlineSVG(__DIR__ . '/icons/' . $arch . '.svg');
+                $html .= '<a href="' . $url . '">' . $file . '</a>';
+                $html .= '</div></li>';
+            }
         }
         $html .= '</ul>';
-
 
         return $html;
     }
