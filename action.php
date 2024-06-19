@@ -78,9 +78,9 @@ class action_plugin_golocal extends ActionPlugin
             foreach ($archlist as $arch) {
                 $file = 'golocal-' . $os . '_' . $arch;
                 $file .= $os === 'windows' ? '.exe' : '';
-                $url = 'https://github.com/cosmocode/dokuwiki-plugin-golocal/releases/latest/download/'.$file;
+                $url = 'https://github.com/cosmocode/dokuwiki-plugin-golocal/releases/latest/download/' . $file;
 
-                $classes = join(' ', ['li', 'os-' . $os, 'arch-' . $arch]);
+                $classes = implode(' ', ['li', 'os-' . $os, 'arch-' . $arch]);
 
                 $html .= '<li><div class="' . $classes . '">';
                 $html .= inlineSVG(__DIR__ . '/icons/' . $os . '.svg');
@@ -93,6 +93,4 @@ class action_plugin_golocal extends ActionPlugin
 
         return $html;
     }
-
-
 }
