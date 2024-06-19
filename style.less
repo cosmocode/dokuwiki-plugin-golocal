@@ -1,0 +1,47 @@
+/**
+ * The download list
+ */
+ul.golocal-download {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    li {
+        margin: 0.25em 0;
+        div.li {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            gap: 0.25em;
+
+            svg {
+                opacity: 0.5;
+            }
+        }
+    }
+}
+
+/**
+ * The dialog
+ */
+dialog.golocal-dialog {
+    top: -20%;
+    border: 1px solid @ini_border;
+
+    main {
+        padding: 1em 0;
+    }
+
+    footer {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1em;
+        border-top: 1px solid @ini_border;
+
+        label {
+            display: flex;
+            gap: 0.25em;
+        }
+    }
+
+
+}

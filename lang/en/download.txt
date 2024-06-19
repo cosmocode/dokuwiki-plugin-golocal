@@ -1,0 +1,19 @@
+====== golocal Protocol Handler ======
+
+//golocal// links allow linking to local or network ressources directly from the wiki. To allow your browser to handle these links, you need to install a protocol handler. This is a small program that will be executed when you click on a //golocal// link. The script will then open the linked ressource in the appropriate application.
+
+Please follow the instructions below to install the protocol handler for your operating system.
+
+  - Download the appropriate version for your operating system and architecture
+  - Move the downloaded file to an appropriate location (eg. ''/usr/local/bin'' or ''C:\Program Files\golocal\golocal.exe'')
+  - Make the file executable (Linux only)
+  - Run the program and select "Install" to install the protocol handler
+
+When clicking on a //golocal// link, your browser will now ask you to open the link with the installed protocol handler. You can also set the handler as the default application for //golocal// links.
+
+===== Download =====
+
+Below are the download links for the protocol handler.
+
+DOWNLOADSHERE
+
