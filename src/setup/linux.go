@@ -25,7 +25,7 @@ MimeType=%s;
 
 // see https://unix.stackexchange.com/questions/497146/create-a-custom-url-protocol-handler
 func Install() error {
-	self := os.Args[0] // FIXME needs absolute path
+	self, _ := os.Executable()
 	desktopFile := desktopFile()
 	schemeMimeType := fmt.Sprintf("x-scheme-handler/%s", PROTOCOL)
 	desktopEntry := strings.TrimLeft(fmt.Sprintf(DESKTOPFILE, self, schemeMimeType), "\n")
@@ -68,7 +68,7 @@ func Uninstall() error {
 }
 
 func Run(path string) error {
-	out, err := exec.Command("xdg-open", path).CombinedOutput()
+	out, err := exec.Command("xdg-open", "smb:"+path).CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("Failed to execute xdg-open command.\n%s\n%s", err.Error(), out)
 	}

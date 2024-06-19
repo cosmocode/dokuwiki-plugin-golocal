@@ -44,13 +44,14 @@ func main() {
 func guiInit() (fyne.App, fyne.Window) {
 	application := app.New()
 	w := application.NewWindow(fmt.Sprintf("%s handler", setup.PROTOCOL))
-	w.Resize(fyne.NewSize(800, 400))
+	w.Resize(fyne.NewSize(500, 200))
+	w.CenterOnScreen()
 	return application, w
 }
 
 func guiInstaller(window fyne.Window) {
 	lblIntro := widget.NewLabel(i18n.T("intro", nil))
-	lblIntro.Wrapping = fyne.TextWrapWord
+	//lblIntro.Wrapping = fyne.TextWrapWord // breaks window height, see fyne-io/fyne#4097
 	btnInstall := widget.NewButton(i18n.T("install", nil), func() { install(window) })
 	btnUninstall := widget.NewButton(i18n.T("uninstall", nil), func() { uninstall(window) })
 
