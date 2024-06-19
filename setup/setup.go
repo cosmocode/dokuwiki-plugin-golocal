@@ -1,3 +1,3 @@
 package setup
 
-const PROTOCOL = "locallink"
+const PROTOCOL = "golocal"

@@ -6,9 +6,9 @@ Running it without any arguments starts it in GUI mode, giving options to instal
 
 ## build
 
-Addional build dependencies on ArchLinux (next to go, gcc, make, etc)
+Additional build dependencies on ArchLinux (next to go, gcc, make, etc)
 
-  * mingw-w64-gcc-bin
+  * mingw-w64-gcc
     * mingw-w64-binutils-bin
     * mingw-w64-crt-bin
     * mingw-w64-headers-bin

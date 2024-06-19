@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 package setup
@@ -78,7 +79,8 @@ func Uninstall() error {
 }
 
 func Run(path string) error {
-	out, err := exec.Command("cmd", "/C", "start", path).CombinedOutput()
+	// note: "golocal" is the title for the command window
+	out, err := exec.Command("cmd", "/C", "start", "golocal", path).CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("Failed to execute command.\n%s\n%s", err.Error(), out)
 	}

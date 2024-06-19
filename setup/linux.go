@@ -1,3 +1,4 @@
+//go:build linux
 // +build linux
 
 package setup
@@ -24,7 +25,7 @@ MimeType=%s;
 
 // see https://unix.stackexchange.com/questions/497146/create-a-custom-url-protocol-handler
 func Install() error {
-	self := os.Args[0]
+	self := os.Args[0] // FIXME needs absolute path
 	desktopFile := desktopFile()
 	schemeMimeType := fmt.Sprintf("x-scheme-handler/%s", PROTOCOL)
 	desktopEntry := strings.TrimLeft(fmt.Sprintf(DESKTOPFILE, self, schemeMimeType), "\n")
