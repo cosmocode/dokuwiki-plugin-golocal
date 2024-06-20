@@ -34,4 +34,14 @@ linux32:
 
 linux: linux64 linux32
 
-all: clean windows linux
+
+macos64:
+	CGO_ENABLED=1 \
+	GOOS=darwin \
+	GOARCH=amd64 \
+	CC=o64-clang \
+	go build -o $(OUT)/$(NAME)-macos_x64 .
+
+macos: macos64
+
+all: clean linux windows macos

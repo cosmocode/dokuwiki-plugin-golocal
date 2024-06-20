@@ -5,10 +5,12 @@ go 1.22.3
 require (
 	fyne.io/fyne/v2 v2.4.5
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
+	github.com/mitchellh/go-homedir v1.0.0
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
 	golang.org/x/sys v0.21.0
 	golang.org/x/text v0.16.0
 	gopkg.in/yaml.v2 v2.4.0
+	howett.net/plist v1.0.1
 )
 
 require (
