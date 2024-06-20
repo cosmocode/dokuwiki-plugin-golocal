@@ -71,7 +71,7 @@ class action_plugin_golocal extends ActionPlugin
     protected function getDownloadLinks()
     {
         $oslist = ['windows', 'linux'];
-        $archlist = ['amd64', 'x86'];
+        $archlist = ['x64', 'x86'];
 
         $html = '<ul class="golocal-download">';
         foreach ($oslist as $os) {

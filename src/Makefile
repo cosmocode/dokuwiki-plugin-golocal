@@ -10,7 +10,7 @@ windows64:
 	GOOS=windows \
 	GOARCH=amd64 \
 	CC=x86_64-w64-mingw32-gcc \
-	go build -o $(OUT)/$(NAME)-windows_amd64.exe -ldflags -H=windowsgui .
+	go build -o $(OUT)/$(NAME)-windows_x64.exe -ldflags -H=windowsgui .
 
 windows32:
 	CGO_ENABLED=1 \
@@ -24,7 +24,7 @@ windows: windows64 windows32
 linux64:
 	GOOS=linux \
 	GOARCH=amd64 \
-	go build -o $(OUT)/$(NAME)-linux_amd64 .
+	go build -o $(OUT)/$(NAME)-linux_x64 .
 
 linux32:
 	CGO_ENABLED=1 \

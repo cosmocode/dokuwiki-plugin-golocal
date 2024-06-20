@@ -13,7 +13,7 @@ When clicking on a //golocal// link, your browser will now ask you to open the l
 
 ===== Download =====
 
-Below are the download links for the protocol handler.
+Below are the download links for the protocol handler. The probably most fitting one for your operating system should be highlighted.
 
 DOWNLOADSHERE
 
