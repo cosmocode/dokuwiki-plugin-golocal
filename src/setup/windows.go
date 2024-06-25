@@ -8,6 +8,7 @@ import (
 	"golang.org/x/sys/windows/registry"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // https://stackoverflow.com/a/3964401
@@ -79,8 +80,11 @@ func Uninstall() error {
 }
 
 func Run(path string) error {
-	// note: "golocal" is the title for the command window
-	out, err := exec.Command("cmd", "/C", "start", "golocal", path).CombinedOutput()
+	path = strings.Replace(path, "/", "\\", -1)
+
+	// note: the empty parameter is the title of the window and required even though it should be optional
+	out, err := exec.Command("cmd", "/C", "start", "", "/B", path).CombinedOutput()
+
 	if err != nil {
 		return fmt.Errorf("Failed to execute command.\n%s\n%s", err.Error(), out)
 	}
