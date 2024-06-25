@@ -5,43 +5,24 @@ OUT := ../dl
 clean:
 	rm -f $(OUT)/*
 
-windows64:
+windows:
 	CGO_ENABLED=1 \
 	GOOS=windows \
 	GOARCH=amd64 \
 	CC=x86_64-w64-mingw32-gcc \
-	go build -o $(OUT)/$(NAME)-windows_x64.exe -ldflags -H=windowsgui .
+	go build -o $(OUT)/$(NAME)-windows.exe -ldflags -H=windowsgui .
 
-windows32:
-	CGO_ENABLED=1 \
-	GOOS=windows \
-	GOARCH=386 \
-	CC=i686-w64-mingw32-gcc \
-	go build -o $(OUT)/$(NAME)-windows_x86.exe -ldflags -H=windowsgui .
 
-windows: windows64 windows32
-
-linux64:
+linux:
 	GOOS=linux \
 	GOARCH=amd64 \
-	go build -o $(OUT)/$(NAME)-linux_x64 .
+	go build -o $(OUT)/$(NAME)-linux .
 
-linux32:
-	CGO_ENABLED=1 \
-	GOOS=linux \
-	GOARCH=386 \
-	go build -o $(OUT)/$(NAME)-linux_x86 .
-
-linux: linux64 linux32
-
-
-macos64:
+macos:
 	CGO_ENABLED=1 \
 	GOOS=darwin \
 	GOARCH=amd64 \
 	CC=o64-clang \
-	go build -o $(OUT)/$(NAME)-macos_x64 .
-
-macos: macos64
+	go build -o $(OUT)/$(NAME)-macos .
 
 all: clean linux windows macos
