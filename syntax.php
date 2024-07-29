@@ -25,35 +25,42 @@ class syntax_plugin_golocal extends SyntaxPlugin
     /** @inheritDoc */
     public function getSort()
     {
-        return 155;
+        return 150;
     }
 
     /** @inheritDoc */
     public function connectTo($mode)
     {
-        $this->Lexer->addSpecialPattern('<FIXME>', $mode, 'plugin_golocal');
-//        $this->Lexer->addEntryPattern('<FIXME>', $mode, 'plugin_golocal');
+        $this->Lexer->addSpecialPattern('\\[\\[[C-Z]:\\\\[^]]*\\]\\]', $mode, 'plugin_golocal');
     }
 
-//    /** @inheritDoc */
-//    public function postConnect()
-//    {
-//        $this->Lexer->addExitPattern('</FIXME>', 'plugin_golocal');
-//    }
 
     /** @inheritDoc */
     public function handle($match, $state, $pos, Doku_Handler $handler)
     {
-        $data = [];
+        $match = substr($match, 2, -2);
+        [$path, $title] = sexplode('|', $match, 2);
+        $path = trim($path);
+        $title = trim($title);
+        if (!$title) $title = $path;
 
-        return $data;
+        return [$path, $title];
     }
 
     /** @inheritDoc */
     public function render($mode, Doku_Renderer $renderer, $data)
     {
-        if ($mode !== 'xhtml') {
-            return false;
+        if ($mode == 'xhtml') {
+
+            $params = [
+                'href' => 'file:////' . str_replace(':', '/', str_replace('\\', '/', $data[0])),
+                'title' => $data[0],
+                'class' => 'windows'
+            ];
+
+            $renderer->doc .= '<a ' . buildAttributes($params) . '>' . hsc($data[1]) . '</a>';
+        } else {
+            $renderer->cdata($data[1]);
         }
 
         return true;
