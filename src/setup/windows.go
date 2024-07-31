@@ -8,7 +8,6 @@ import (
 	"golang.org/x/sys/windows/registry"
 	"os"
 	"os/exec"
-	"regexp"
 	"strings"
 )
 
@@ -80,16 +79,11 @@ func Uninstall() error {
 	return nil
 }
 
+func PreparePath(path string, isLetter bool) string {
+	return strings.Replace(path, "/", "\\", -1)
+}
+
 func Run(path string) error {
-	// drive letter detection
-	isLetter, _ := regexp.MatchString("^/[C-Z]//", path)
-	if isLetter {
-		path = strings.Replace(path, "//", ":", 1)
-		path = path[1:]
-	}
-
-	path = strings.Replace(path, "/", "\\", -1)
-
 	// note: the empty parameter is the title of the window and required even though it should be optional
 	out, err := exec.Command("cmd", "/C", "start", "", "/B", path).CombinedOutput()
 

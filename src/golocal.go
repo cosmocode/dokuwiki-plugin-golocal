@@ -14,6 +14,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 )
 
 func main() {
@@ -68,11 +69,22 @@ func guiInstaller(window fyne.Window) {
 
 func run(path string, window fyne.Window) {
 	// remove protocol
+	log.Println("Input URL:", path)
 	r, _ := regexp.Compile("^.*?://")
 	path = r.ReplaceAllString(path, "")
+	log.Println("Extracted Path:", path)
 
-	// FIXME decode URI, parse it maybe?
+	// drive letter detection
+	isLetter, _ := regexp.MatchString("^/[C-Z]//", path)
+	if isLetter {
+		path = strings.Replace(path, "//", ":\\", 1)
+		path = path[1:]
+		log.Println("Drive letter path:", path)
+	}
 
+	// local path
+	path = setup.PreparePath(path, isLetter)
+	log.Println("Opening Path: ", path)
 	window.SetContent(widget.NewLabel(path))
 
 	err := setup.Run(path)

@@ -8,7 +8,6 @@ import (
 	"howett.net/plist"
 	"os"
 	"os/exec"
-	"regexp"
 	"strings"
 )
 
@@ -38,17 +37,17 @@ func Uninstall() error {
 	return nil
 }
 
-func Run(path string) error {
-	// drive letter detection
-	isLetter, _ := regexp.MatchString("^/[C-Z]//", path)
+func PreparePath(path string, isLetter bool) string {
 	if isLetter {
 		// we assume that the path is auto-mounted under /media/<letter>
-		path = strings.Replace(path, "//", "/", 1)
-		path = "/media/" + path[1:]
+		path = strings.Replace(path, ":\\", "/", -1)
+		return "/media/" + path
 	} else {
-		path = "smb:" + path
+		return "smb:" + path
 	}
+}
 
+func Run(path string) error {
 	out, err := exec.Command("open", path).CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("Failed to execute open command.\n%s\n%s", err.Error(), out)
