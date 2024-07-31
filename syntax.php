@@ -51,7 +51,6 @@ class syntax_plugin_golocal extends SyntaxPlugin
     public function render($mode, Doku_Renderer $renderer, $data)
     {
         if ($mode == 'xhtml') {
-
             $params = [
                 'href' => 'file:////' . str_replace(':', '/', str_replace('\\', '/', $data[0])),
                 'title' => $data[0],
