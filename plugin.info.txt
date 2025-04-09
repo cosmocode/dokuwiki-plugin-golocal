@@ -1,7 +1,7 @@
 base   golocal
 author Andreas Gohr
 email  dokuwiki@cosmocode.de
-date   2024-07-31
+date   2025-04-09
 name   golocal plugin
 desc   Open local links through a custom protocol handler
 url    https://www.dokuwiki.org/plugin:golocal
