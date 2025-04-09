@@ -12,6 +12,7 @@ import (
 	"github.com/cosmocode/golocal/i18n"
 	setup "github.com/cosmocode/golocal/setup"
 	"log"
+	"net/url"
 	"os"
 	"regexp"
 	"strings"
@@ -68,10 +69,11 @@ func guiInstaller(window fyne.Window) {
 }
 
 func run(path string, window fyne.Window) {
-	// remove protocol
+	// remove protocol and decode URL
 	log.Println("Input URL:", path)
 	r, _ := regexp.Compile("^.*?://")
 	path = r.ReplaceAllString(path, "")
+	path, _ = url.QueryUnescape(path)
 	log.Println("Extracted Path:", path)
 
 	// drive letter detection
