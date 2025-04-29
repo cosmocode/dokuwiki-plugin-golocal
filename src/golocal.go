@@ -22,7 +22,20 @@ func main() {
 	flag.Usage = usage
 	flagInstall := flag.Bool("install", false, "Install the protocol handler")
 	flagUninstall := flag.Bool("uninstall", false, "Uninstall the protocol handler")
-	flag.Parse()
+	
+	// Parse flags and check for errors
+	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+		usage()
+		os.Exit(1)
+	}
+	
+	// Check for unknown flags
+	if flag.NArg() > 0 && strings.HasPrefix(flag.Arg(0), "-") {
+		fmt.Fprintf(os.Stderr, "Error: unknown flag: %s\n", flag.Arg(0))
+		usage()
+		os.Exit(1)
+	}
 
 	i18n.Initialize()
 
