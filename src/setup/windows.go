@@ -6,6 +6,7 @@ package setup
 import (
 	"fmt"
 	"golang.org/x/sys/windows/registry"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -21,6 +22,7 @@ func Install() error {
 
 	keyRoot, _, err = registry.CreateKey(registry.CLASSES_ROOT, PROTOCOL, registry.ALL_ACCESS)
 	if err != nil {
+		log.Print("Failed to create system wide key. Trying user key.")
 		// if system wide install fails, use current user's registry
 		keypath := fmt.Sprintf("Software\\Classes\\%s", PROTOCOL)
 		keyRoot, _, err = registry.CreateKey(registry.CURRENT_USER, keypath, registry.ALL_ACCESS)

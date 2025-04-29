@@ -9,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/apenwarr/fixconsole"
 	"github.com/cosmocode/golocal/i18n"
 	setup "github.com/cosmocode/golocal/setup"
 	"log"
@@ -19,22 +20,22 @@ import (
 )
 
 func main() {
+	_ = fixconsole.FixConsoleIfNeeded()
+	log.SetOutput(os.Stdout)
+	fmt.Println()
+
 	flag.Usage = usage
 	flagInstall := flag.Bool("install", false, "Install the protocol handler")
 	flagUninstall := flag.Bool("uninstall", false, "Uninstall the protocol handler")
-	
+
 	// Parse flags and check for errors
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
-		usage()
-		os.Exit(1)
+		log.Fatalf("Error: %s", err)
 	}
-	
+
 	// Check for unknown flags
 	if flag.NArg() > 0 && strings.HasPrefix(flag.Arg(0), "-") {
-		fmt.Fprintf(os.Stderr, "Error: unknown flag: %s\n", flag.Arg(0))
-		usage()
-		os.Exit(1)
+		log.Fatalf("Error: unknown flag: %s", flag.Arg(0))
 	}
 
 	i18n.Initialize()
@@ -54,6 +55,7 @@ func main() {
 		// start the main loop
 		window.ShowAndRun()
 	}
+	log.Println("done")
 }
 
 func guiInit() (fyne.App, fyne.Window) {
